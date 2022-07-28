@@ -9,3 +9,5 @@ applications portable.
 To start, run:
 
 docker-compose up --build -d
+
+If it fails the first time, try again
