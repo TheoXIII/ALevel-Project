@@ -1,0 +1,31 @@
+{
+    "COVID-19": [
+        "covid",
+        "coronavirus",
+        "track",
+        "trace",
+        "lockdown"
+    ],
+    "UK Politics": [
+        "boris",
+        "johnson",
+        "keir",
+        "starmer",
+        "house of commons",
+        "house of lords",
+        "brexit"
+    ],
+    "US Politics": [
+        "trump",
+        "biden",
+        "harris",
+        "republican",
+        "democrat"
+    ],
+    "animals": [
+        "dog",
+        "dogs",
+        "cat",
+        "cats"
+    ]
+}

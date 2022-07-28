@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tracked Issues - SmartRSS</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    //JS that allows the dynamic showing and hiding of parts of the webpage.
+    $(document).on('change', '.div-toggle', function() {
+    var target = $(this).data('target');
+    var show = $("option:selected", this).data('show');
+    $(target).children().addClass('hide');
+    $(show).removeClass('hide');
+    });
+    $(document).ready(function() {
+        $('.div-toggle').trigger('change');
+    });
+</script>
+<!-- CSS which defines the hidden state. -->
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<!-- Display the message if there is one. -->
+{% if message %}
+    <h4>{{ message }}</h4>
+{% endif %}
+
+<!-- Display the tracked feeds and their tags and inform the user if there aren't any of the former. -->
+<h1>Your tracked feeds</h1>
+{% if feeds %}
+    {% for outlet, feeds in feeds.items() %}
+        <h4>{{ issue }}</h2>
+        <p>{{ ', '.join(tags)|e }}</p>
+    {% endfor %}
+{% else %}
+    <p>No tracked feeds</p>
+{% endif %}
+
+<!-- Form to add outlets which takes the new outlet name and the outlet's feeds. -->
+<h1>Change tracked outlets and feeds</h1>
+<h2>Add tracked outlet</h2>
+<form action="/track_feeds" method="post">
+    <label for="add_issue">Feed name</label><br>
+    <input type="text" id="add_issue" name="add_issue"><br>
+    <label for="add_issue">Tags (separate with comma)</label><br>
+    <input type="text" id="add_tags" name="add_tags" size="50"><br>
+    <input type="submit" value="Add issue">
+</form>
+
+<!-- Drop down form to remove issues which contains all issue names. -->
+<h2>Remove tracked issue</h2>
+<form action="/track_issues" method="post">
+    <label for="rm_issue">Issue name</label><br>
+    <select id="rm_issue" name="rm_issue">
+        {% for issue in issues.keys() %}
+            <option value="{{ issue|e }}">{{ issue }}</option>
+        {% endfor %}
+    </select> 
+    <input type="submit" value="Remove issue">
+</form>
+
+<!-- Form to edit issue tags. -->
+<h2>Edit tracked issue's tags</h2>
+<label for="edit_issue">Issue name</label><br>
+<!-- Drop down form to select issue to be edited. -->
+<select class="div-toggle" data-target=".edit-tags">
+    {% for issue in issues.keys() %}
+        <option value="{{ issue|e }}" data-show=".{{ issue|replace(" ","")|e }}">{{ issue|e }}</option>
+    {% endfor %}
+</select>
+<!-- Enter new tags for the issue. The default tags change to those already set for the issue which is selected and the hidden issue field changes to that which is selected. -->
+<div class="edit-tags">
+    {% for issue,tags in issues.items() %}
+        <div class="{{ issue|replace(" ","")|e }} hide">
+            <form action="/track_issues" method="post">
+            <label for="edit_issue">Change tags (separate with comma)</label><br>
+            <input type="hidden" id="edit_issue" name="edit_issue" value="{{ issue|e }}"> 
+            <input type="text" id="edit_tags" name="edit_tags" size="50" value="{{ ', '.join(tags) }}"><br>
+            <input type="submit" value="Edit issue">
+            </form>
+        </div>
+    {% endfor %}
+</div>
+</form>
+
+</body>
+</html>

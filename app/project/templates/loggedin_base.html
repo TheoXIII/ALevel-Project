@@ -1,0 +1,39 @@
+ <!DOCTYPE html>
+<html>
+<head>
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+{% block title %}
+<title>SmartRSS</title>
+{% endblock %}
+{% block javascript %}
+{% endblock %}
+</head>
+<body>
+<div class ="header">
+    <h1>SmartRSS</h1>
+</div>
+
+<div class="topnav">
+    <a href="{{ url_for('main_bp.dashboard') }}" class = "topnav">Dashboard</a>
+    <a href="{{ url_for('main_bp.search_tags') }}" class = "topnav">Search</a>
+    <a href="{{ url_for('main_bp.track_target', target='issues') }}" class = "topnav">Change tracked issues and topics</a>
+    <a href="{{ url_for('main_bp.track_target', target='outlets') }}" class = "topnav">Change tracked outlets and bundles</a>
+    <a href="{{ url_for('main_bp.preferences') }}" class = "topnav">Preferences</a>
+    <a href="{{ url_for('main_bp.support_messaging') }}" class = "topnav">Help</a>
+    <a href="{{ url_for('auth_bp.logout_page') }}" class = "topnav">Signed in as {{ current_user|e }}. Sign out.</a>
+</div>
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

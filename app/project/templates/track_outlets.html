@@ -1,0 +1,27 @@
+{% extends "base_tracker.html" %}
+
+{% block javascript %}
+{{ super() }}
+<script>
+ function showHide(outlet) {
+  var entry_list = document.getElementById("show-hide-"+outlet);
+  var button = document.getElementById("show-hide-button-"+outlet);
+  if (entry_list.style.display === "none") {
+    entry_list.style.display = "block";
+    button.innerHTML = "Hide";
+  } else {
+    entry_list.style.display = "none";
+    button.innerHTML = "Show";
+  }
+} 
+</script>
+{% endblock %}
+
+{% block key %}Outlet{% endblock %}
+{% block keys %}Outlets{% endblock %}
+{% block vals %}Feeds{% endblock %}
+{% block page_address %}/track/outlets{% endblock %}
+{% block size_styling %}rows="10" cols="50"{% endblock %}
+{% block separator %}
+{% endblock %}
+{% block separator_words %}line break{% endblock %}

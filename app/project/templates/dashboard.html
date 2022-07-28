@@ -1,0 +1,43 @@
+{% extends "loggedin_base.html" %}
+{% block title %}
+<title>Home - SmartRSS</title>
+{% endblock %}
+{% block content %}
+
+<div class="searchbar">
+    <!-- Form which takes the search term as input from the user. -->
+    <form action="{{ url_for('main_bp.search_tags') }}" method="post">
+        <label for="search">Story search</label><br>
+        <input type="text" id="search" name="search"><br>
+        <input type="submit" value="Search">
+    </form>
+</div>
+
+<!-- Sends a signal to the backend to refresh the RSS data. -->
+
+<form action="{{ url_for('main_bp.dashboard') }}" method="post">
+    <input type="submit" name="refresh" value="Refresh feeds"><br>
+</form>
+
+<div class="row">
+    <div class="column">
+    <!-- Print a heading for each issue, with the number of found stories printed, which contains a link to the issue page. -->
+        <h1>Today's news for your interests</h1>
+        {% if issues_data %}
+            {% for issue, outlets in issues_data.items() %}
+                <h2>{{ issue|e }} - <a href="/issue/{{ string_to_safe[issue]|e }}">{{ outlets['count']|e }} stories found</a></h2>
+            {% endfor %}
+        {% else %}
+            <h2>No news found.</h2>
+        {% endif %}
+    </div>
+    <div class ="column">
+    <!-- Print the common words as a link to search for the the word to the term with their frequency in descending order of frequency. -->
+        <h1>Popular topics</h1>
+        {% for topic in common_words %}
+            <a href = "{{ url_for('main_bp.search_tags', word=topic[0]) }}">{{ topic[0]|e }} - {{ topic[1]|e }} stories</a><br>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

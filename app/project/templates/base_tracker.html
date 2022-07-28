@@ -1,0 +1,124 @@
+{% extends "loggedin_base.html" %}
+
+{% macro list_entries(type,data) -%}
+
+<h2>{{ type }}</h2>
+{% if data %}
+    {% for key, values in data.items() %}
+        <h4>{{ key }}</h2>
+<!-- Display the values as plaintext separated by commas if the issue tracking page is loaded, otherwise display the values as links separated by line breaks. -->
+        {% if self.keys() == "Issues" %}
+            <p>{{ self.separator().join(values)|e }}</p>
+        {% else %}
+            <button id="show-hide-button-{{ key }}" onclick="showHide('{{ key }}')">Show</button>
+            <div id="show-hide-{{ key }}" style="display:none;">
+            {% for value in values %}
+                <a href="{{ value|e }}">{{ value|e }}</a><br>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <p>No tracked {{ type }} {{ self.keys() }}</p>
+{% endif %}
+
+{%- endmacro %}
+
+{% block title %}
+<title>Tracked {% block keys %}{% endblock %} - SmartRSS</title>
+{% endblock %}
+{% block javascript %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    //JQuery that allows the dynamic showing and hiding of parts of the webpage.
+    $(document).on('change', '.div-toggle', function() {
+    var target = $(this).data('target');
+    var show = $("option:selected", this).data('show');
+    $(target).children().addClass('hide');
+    $(show).removeClass('hide');
+    });
+    $(document).ready(function() {
+        $('.div-toggle').trigger('change');
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Display the message if there is one. -->
+{% if message %}
+    <h4>{{ message }}</h4>
+{% endif %}
+
+<div class="row">
+    <div class="column">
+        <!-- Display the tracked keys and their values and inform the user if there aren't any of the former. -->
+        <h1>Your tracked {{ self.keys() }}</h1>
+        {{ list_entries("Default",active_default_data) }}
+        {{ list_entries("Custom",data) }}
+    </div>
+    <div class ="column">
+        <h1>Change tracked {{ self.keys() }}</h1>
+        
+        <!-- Form to change default tracked issues. -->
+        <h2>Change default {{ self.keys() }}</h2>
+        <form action="{% block page_address %}{% endblock %}" method="post">
+            {% for key,vals in default_data.items() %}
+                {% if vals[1] %}
+                    <input type="checkbox" id="id_{{ key|e }}" name="change_defaults" value="{{ key|e }}" checked>
+                {% else %}
+                    <input type="checkbox" id="id_{{ key|e }}" name="change_defaults" value="{{ key|e }}">
+                {% endif %}
+                <label for="{{ key|e }}">{{ key }}: {{ self.separator().join(vals[0])|e }}</label><br>
+            {% endfor %}
+            <input type="submit" value="Change default {{ self.keys() }}">
+        </form>
+        
+        <!-- Form to add key which takes the new key name and the key's values. -->
+        <h2>Add tracked {% block key %}{% endblock %}</h2>
+        <form action="{{ self.page_address() }}" method="post">
+            <label for="add_key">{{ self.key() }} name</label><br>
+            <input type="text" id="add_key" name="add_key"><br>
+            <label for="add_vals">{% block vals %}{% endblock %} (separate with {% block separator_words %}{% endblock %})</label><br>
+            <textarea id="add_vals" name="add_vals" {% block size_styling %}{% endblock %}></textarea><br>
+            <input type="submit" value="Add {{ self.key() }}">
+        </form>
+
+        <!-- Drop down form to remove values which contains all possible keys. -->
+        <h2>Remove tracked {{ self.key() }}</h2>
+        <form action="{{ self.page_address() }}" method="post">
+            <label for="rm_key">{{ self.key() }} name</label><br>
+            <select id="rm_key" name="rm_key">
+                {% for key in data.keys() %}
+                    <option value="{{ key|e }}">{{ key }}</option>
+                {% endfor %}
+            </select> 
+            <input type="submit" value="Remove {{ self.key() }}">
+        </form>
+
+        <!-- Form to edit key values. -->
+        <h2>Edit tracked {{ self.key() }}'s {{ self.vals() }}</h2>
+        <label for="edit_data">{{ self.key() }} name</label><br>
+        <!-- Drop down form to select key to have its values edited. -->
+        <select class="div-toggle" data-target=".edit-vals">
+            {% for key in data.keys() %}
+                <option value="{{ key|e }}" data-show=".{{ key|replace(" ","")|e }}">{{ key|e }}</option>
+            {% endfor %}
+        </select>
+        <!-- Enter new values for the key. The default values change to those already set for the key which is selected and the hidden issue key changes to that which is selected. -->
+        <div class="edit-vals">
+            {% for key,vals in data.items() %}
+                <div class="{{ key|replace(" ","")|e }} hide">
+                    <form action="{{ self.page_address() }}" method="post">
+                    <label for="edit_vals">Change {{ self.vals() }} (separate with {{ self.separator_words() }})</label><br>
+                    <input type="hidden" id="edit_key" name="edit_key" value="{{ key|e }}">
+                    <textarea id="edit_vals" name="edit_vals" {{ self.size_styling() }}>{{ self.separator().join(vals) }}</textarea><br>
+                    <input type="submit" value="Edit {{ self.key() }}">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

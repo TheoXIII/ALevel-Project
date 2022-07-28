@@ -1,0 +1,27 @@
+{
+    "COVID-19": [
+        "covid",
+        "coronavirus",
+        "track",
+        "trace",
+        "lockdown"
+    ],
+    "UK Politics": [
+        "boris",
+        "johnson",
+        "keir",
+        "starmer",
+        "house of commons",
+        "house of lords",
+        "brexit"
+    ],
+    "US Politics": [
+        "trump",
+        "pence",
+        "biden",
+        "harris",
+        "republican",
+        "democrat",
+        "presidental election",
+    ]
+}

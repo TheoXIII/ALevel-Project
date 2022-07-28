@@ -1,0 +1,11 @@
+{% extends "admin/master.html" %}
+
+{% block body %}
+
+<h1>All support queries</h1>
+{% for message in messages %}
+    <h4>On {{ message['date'] }}, {{ message['sender'] }} wrote:</h4>
+    <p>{{ message['message'] }}</p>
+{% endfor %}
+
+{% endblock %}

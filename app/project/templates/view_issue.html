@@ -1,0 +1,42 @@
+{% extends "loggedin_base.html" %}
+{% block title %}
+<title>{{ issue|e }} - SmartRSS</title>
+{% endblock %}
+
+{% block javascript %}
+<script>
+ function showHide(outlet) {
+  var entry_list = document.getElementById("show-hide-"+outlet);
+  var button = document.getElementById("show-hide-button-"+outlet);
+  if (entry_list.style.display === "none") {
+    entry_list.style.display = "block";
+    button.innerHTML = "Hide";
+  } else {
+    entry_list.style.display = "none";
+    button.innerHTML = "Show";
+  }
+} 
+</script>
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Print a heading containing the issue, with the found stories (titles, descriptions, links and publication date) for that issue printed under a heading for their outlet. The number of found stories is also printed under the heading. -->
+
+<h1>{{ issue|e }}</h1>
+<p>{{ issue_data['count']|e }} stories found.</p>
+{% for outlet, entries in issue_data['data'].items() %}
+    <h2>{{ outlet }}</h2>
+    <button id="show-hide-button-{{ outlet|e }}" onclick="showHide('{{ outlet|e }}')">Show</button>
+    <div id="show-hide-{{ outlet|e }}" style="display:none;">
+    {% for entry in entries %}
+        <h4>{{ entry['title']|e }}</h4>
+        <p>{{ entry['summary']|e }}</p>
+        <a href="{{ entry['link']|e }}">{{ entry['link']|e }}</a>
+        <p>Published: {{ entry['published']|e }}</p>
+    {% endfor %}
+    </div>
+{% endfor %}
+
+{% endblock %}

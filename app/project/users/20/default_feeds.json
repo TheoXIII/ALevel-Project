@@ -1,0 +1,20 @@
+{
+    "CNN": [
+        [
+            "http://rss.cnn.com/rss/edition_world.rss",
+            "http://rss.cnn.com/rss/edition_europe.rss",
+            "http://rss.cnn.com/rss/edition_americas.rss",
+            "http://rss.cnn.com/rss/edition_us.rss"
+        ],
+        true
+    ],
+    "New York Times": [
+        [
+            "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Europe.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/Americas.xml",
+            "https://rss.nytimes.com/services/xml/rss/nyt/US.xml"
+        ],
+        true
+    ]
+}

@@ -1,0 +1,23 @@
+{% extends "admin/master.html" %}
+
+{% block body %}
+
+<h1>Providing support for {{ customer }}</h1>
+
+<div class="row">
+    <div class="column">
+        <form action="" method="post">
+        <label for="send_msg">New message:</label><br>
+        <textarea id="send_msg" name="send_msg" rows="10" cols="50" style="font-size: 15pt"></textarea><br>
+        <input type="submit" value="Send">
+    </div>
+    <div class="column">
+        <h1>Previous messages</h1>
+        {% for message in messages %}
+            <h4>On {{ message['date'] }}, {{ message['sender'] }} wrote:</h4>
+            <p>{{ message['message'] }}</p>
+        {% endfor %}
+    </div>
+    
+</div>
+{% endblock %}

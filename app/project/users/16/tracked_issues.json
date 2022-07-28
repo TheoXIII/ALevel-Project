@@ -1,0 +1,21 @@
+{
+    "COVID": [
+        "Covid"
+    ],
+    "COVID-19": [
+        "Test"
+    ],
+    "Covid 19": [
+        "test"
+    ],
+    "Test": [
+        "test1"
+    ],
+    "testing/": [
+        "tag1 tag2"
+    ],
+    "testing\\<>,.#@':;[]}{-_+=": [
+        "tag3",
+        "tag4"
+    ]
+}
